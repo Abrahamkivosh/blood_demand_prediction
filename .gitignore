@@ -8,3 +8,4 @@ server/*__pycache__/
 *.sqlite3
 *.pyc
 **/*.pyc
+forecast/migrations/
