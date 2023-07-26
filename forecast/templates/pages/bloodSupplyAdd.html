@@ -25,7 +25,7 @@
       <div class="card">
         <div class="card-header">
                   <div class="card-tools">
-            <a href="{% url 'forecast:blood-types-list' %}" class="btn btn-primary">Back</a>
+            <a href="{% url 'forecast:blood-supplies-list' %}" class="btn btn-primary">Back</a>
           </div>
         </div>
         <div class="card-body" >
@@ -36,7 +36,7 @@
             {% csrf_token %}
             <div class="form-group">
               <label for="blood_type">Blood Type</label>
-              <select class="form-control" name="blood_type" id="blood_type">
+              <select class="form-control" name="blood_type" id="blood_type"required >
                 <option value="">Select Blood Type</option>
                 {% for blood_type in blood_types %}
                 <option value="{{ blood_type.id }}">{{ blood_type.blood_type_name }}</option>
@@ -46,7 +46,7 @@
             </div>
             <div class="form-group">
               <label for="location">Select City Name</label>
-              <select class="form-control" name="location" id="location">
+              <select class="form-control" name="location" id="location" required>
                 <option value="" disabled selected>Select City Name</option>
                 {% for city in cities %}
                 <option value="{{ city.weather_forecast__location }}">{{ city.weather_forecast__location}}</option>

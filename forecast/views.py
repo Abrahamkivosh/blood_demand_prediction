@@ -12,6 +12,7 @@ from .services.weather_service import get_weather_forecast
 from .services.blood_demand_service import predict_blood_demand
 from django.db import IntegrityError
 from django.core.management import call_command
+from django.db.models import Sum
 
 
 class IndexView(View):
@@ -362,20 +363,42 @@ class BloodSupplyAddView(View):
         'cities': BloodDemandPrediction.objects.filter(date__gte=current_date).values('weather_forecast__location').distinct(),
 
     }
+
+   
+
     def get(self, request):
+        # check list in cities is greater than 0 if so redirect to blood-predictions-list url
+        if (len(self.data['cities']) < 1):
+            messages.error(request, "Do Blood Predictions Before You Add Blood Into Blood Bank ", extra_tags="danger" )
+            return redirect("forecast:blood-predictions-list")
+            
         return render(request, self.template_name, self.data)
 
     def post(self, request):
         try:
-            blood_type_id = request.POST.get("blood_type_id")
-            blood_quantity = request.POST.get("blood_quantity")
-            user_id = request.POST.get("user_id")
-            blood_demand_prediction_id = request.POST.get("blood_demand_prediction_id")
-            if blood_demand_prediction_id == "":
-                blood_demand_prediction_id = None
-            blood_supply = BloodSupply(blood_type_id=blood_type_id, date=date.today(), blood_quantity=blood_quantity, user_id=user_id, blood_demand_prediction_id=blood_demand_prediction_id)
-            blood_supply.save()
-            responseMessage = {"status": True,"status_code":200, "message": "Successfully Added Blood Supply"}
+            blood_type_id = request.POST.get("blood_type")
+            location_name = request.POST.get("location")
+            search_date = request.POST.get("date")
+            blood_quantity = float( request.POST.get("quantity"))
+            user = request.user
+
+            blood_demand_prediction = BloodDemandPrediction.objects.filter (blood_type_id=blood_type_id, weather_forecast__location=location_name, date=search_date).first()
+            if blood_demand_prediction is not None:
+                # sum already  existing blood supply for that day
+                sm= BloodSupply.objects.filter(blood_type_id=blood_type_id, date=search_date).aggregate(Sum('blood_quantity'))
+                blood_supply_sum = sm.get('blood_quantity__sum')
+                new_quantity_existing =blood_supply_sum  + blood_quantity
+                predicted_demand = blood_demand_prediction.predicted_demand
+                if predicted_demand  < new_quantity_existing:
+                    responseMessage = {"status": False,"status_code":400, "message": "Blood Supply Quantity is Greater Than Predicted Blood Demand of {0}".format(predicted_demand)  }
+                    return JsonResponse(responseMessage, status=responseMessage["status_code"], safe=False)
+                
+
+                blood_supply = BloodSupply(blood_type_id=blood_type_id, date=search_date, blood_quantity=blood_quantity, user=user, blood_demand_prediction=blood_demand_prediction)
+                blood_supply.save()
+                responseMessage = {"status": True,"status_code":200, "message": "Successfully Added Blood Supply"}
+            else:
+                responseMessage = {"status": False,"status_code":400, "message": "No Blood Demand For That Day"}
         except  Exception as e:
                 
                 print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
