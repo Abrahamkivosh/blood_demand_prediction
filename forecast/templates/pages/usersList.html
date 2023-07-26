@@ -1,0 +1,93 @@
+{% extends 'layouts/admin.html' %}
+{% block 'content' %}
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Users Management</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="{% url 'forecast:dashboard' %}">Home</a></li>
+              <li class="breadcrumb-item active">users</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- Main content -->
+    <section class="content">
+      <!-- Default box -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-tools">
+            <a href="{% url 'forecast:users-create' %}" class="btn btn-primary">Add User</a>
+          </div>
+        </div>
+        <div class="card-body">
+          {% include '../includes/messages.html' %}
+          <table class="table table-striped table-bordered">
+            <thead class="thead-dark ">
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Username</th>
+                <th scope="col">First Name</th>
+                <th scope="col">Last Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Active</th>
+                <th scope="col">Date joined</th>
+                <th scope="col">Last login</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for user in users  %}
+              <tr>
+                <td scope="row">{{forloop.counter}}</td>
+                <td>{{user.username}}</td>
+                <td>{{user.first_name}}</td>
+                <td>{{user.last_name}}</td>
+                <td>{{user.email}}</td>
+                <td>
+                  {% if user.is_active %}
+                  <span class="badge badge-success">Active</span>
+                  {% else %}
+                  <span class="badge badge-danger">Inactive</span>
+                  {% endif %}
+
+                </td>
+                <td>{{user.date_joined}}</td>
+                <td>{{user.last_login}}</td>
+
+                <td>
+                  <a href="{% url 'forecast:users-update' user.username %}" class="btn btn-warning"> 
+                    <i class="fa fa-edit"></i> Edit
+                  </a>
+                  <form style="display:inline-block;" class="deleteuserForm1" 
+                  onSubmit="return confirm('Are You Sure You need To Delete!')"
+                  action="" method="POST">
+                    {% csrf_token %}
+                    <button style="display:inline-block;" class="btn btn-danger ">  <i class="fa fa-trash"></i> Delete </button>
+                  </form>
+              </tr>
+              {% endfor %}           
+            </tbody>
+          </table>
+        </div>
+        <!-- /.card-body -->
+        <div class="card-footer">
+        </div>
+        <!-- /.card-footer-->
+      </div>
+      <!-- /.card -->
+    </section>
+    <!-- /.content -->
+  </div>
+  {% endblock 'content' %}
+  
+  {% block 'myscripts' %}
+  {% load static %}
+  <script src="{% static 'js/user.js' %}"></script>
+  {% endblock 'myscripts' %}

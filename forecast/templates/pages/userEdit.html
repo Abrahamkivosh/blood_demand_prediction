@@ -1,0 +1,162 @@
+{% extends 'layouts/admin.html' %}
+{% block 'content' %}
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Add User</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="{% url 'forecast:dashboard' %}">Home</a></li>
+              <li class="breadcrumb-item"><a href="{% url 'forecast:users-list' %}">users</a></li>
+              <li class="breadcrumb-item active">Add User</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+
+      <!-- Default box -->
+      <div class="card">
+        <div class="card-header">
+        
+
+          <div class="card-tools">
+            <a href="{% url 'forecast:users-list' %}" class="btn btn-primary">Back</a>
+          </div>
+        </div>
+        <div class="card-body">
+            <div id="addUserOverlay" class="overlay d-none ">
+                <i class="fas fa-2x fa-sync fa-spin"></i>
+              </div>
+           <form class="row" id="addUserForm" action="{% url 'forecast:users-update' user.username %}" method="POST">
+            
+            {% csrf_token %}
+
+            <div class="form-group col-md-4">
+              <label for="username">Username</label>
+              <input type="text" name="username" id="username" class="form-control" placeholder="Enter Username"
+                required="required"
+                arial-label="Username"
+                aria-describedby="username_help"
+                autofocus="autofocus"
+                autocomplete="off"
+                pattern="[A-Za-z0-9_]+" 
+                title="Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only."
+                maxlength="150"
+                minlength="1"
+                value="{{ user.username }}"
+              >
+              <small id="username_help" class="form-text text-muted">
+                Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.
+              </small>
+
+            </div>
+
+            <div class="form-group col-md-4">
+                <label for="first_name">First Name</label>
+                <input type="first_name" name="first_name" id="first_name" class="form-control" placeholder="Enter First Name"
+                  required="required"
+                  arial-label="first_name"
+                  aria-describedby="first_name_help"
+                  autofocus="autofocus"
+                  autocomplete="off"
+                  title="Enter Valid First Name"
+                  maxlength="150"
+                  minlength="1"
+                  value="{{ user.first_name }}"
+                >
+                <small id="first_name_help" class="form-text text-muted">
+                 Enter Valid First Name
+                </small>
+              </div>
+
+              <div class="form-group col-md-4">
+                <label for="last_name">Last Name</label>
+                <input type="last_name" name="last_name" id="first_name" class="form-control" placeholder="Enter Last Name"
+                  required="required"
+                  arial-label="last_name"
+                  aria-describedby="last_name_help"
+                  autofocus="autofocus"
+                  autocomplete="off"
+                  title="Enter Valid last Name"
+                  maxlength="150"
+                  minlength="1"
+                  value="{{ user.last_name }}"
+                >
+                <small id="last_name_help" class="form-text text-muted">
+                 Enter Valid last Name
+                </small>
+              </div>
+
+
+            <div class="form-group col-md-6">
+              <label for="email">Email</label>
+              <input type="email" name="email" id="email" class="form-control" placeholder="Enter Valid Email"
+                required="required"
+                arial-label="Email"
+                aria-describedby="email_help"
+                autofocus="autofocus"
+                autocomplete="off"
+                title="Enter Valid Email"
+                maxlength="150"
+                minlength="1"
+                value="{{ user.email }}"
+              >
+              <small id="email_help" class="form-text text-muted">
+               Enter Valid Email
+              </small>
+            </div>
+
+            <div class="form-group col-md-6">
+                <label for="is_staff">Is Staff</label>
+                <select name="is_staff" id="is_staff" class="form-control" required="required" aria-label="is_staff" aria-describedby="is_staff_help">
+                  {% if user.is_staff %}
+                  <option value="1" selected="selected">Yes</option>
+                  <option value="0">No</option>
+                  {% else %}
+                  <option value="1">Yes</option>
+                  <option value="0" selected="selected">No</option>
+                  {% endif %}
+                   
+                </select>
+              
+                <small id="is_staff_help" class="form-text text-muted">
+                    Designates whether the user can log into this admin site.
+                </small>
+            </div>
+
+            
+
+            
+
+            <div class="form-group col-12">
+                <button type="submit" class="btn btn-primary btn-block">Update User</button>
+            </div>
+            </form>
+
+
+          
+        </div>
+        <!-- /.card-body -->
+        <div class="card-footer">
+        </div>
+        <!-- /.card-footer-->
+      </div>
+      <!-- /.card -->
+
+    </section>
+    <!-- /.content -->
+  </div>
+  {% endblock 'content' %}
+
+  {% block 'myscripts' %}
+  {% load static %}
+  <script src="{% static 'js/user.js' %}"></script>
+  {% endblock 'myscripts' %}

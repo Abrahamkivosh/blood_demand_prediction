@@ -1,0 +1,90 @@
+{% extends 'layouts/admin.html' %}
+{% block 'content' %}
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Blood Bank Supply</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="{% url 'forecast:dashboard' %}">Home</a></li>
+              <li class="breadcrumb-item"><a href="{% url 'forecast:blood-supplies-list' %}">Blood Bank Supply</a></li>
+              <li class="breadcrumb-item active">Add</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- Main content -->
+    <section class="content">
+
+      <!-- Default box -->
+      <div class="card">
+        <div class="card-header">
+                  <div class="card-tools">
+            <a href="{% url 'forecast:blood-types-list' %}" class="btn btn-primary">Back</a>
+          </div>
+        </div>
+        <div class="card-body" >
+
+       
+           <form class="" action="{% url 'forecast:blood-supplies-add' %}" method="POST" id="bloodSupplyForm" >
+            {% include '../includes/messages.html' %}
+            {% csrf_token %}
+            <div class="form-group">
+              <label for="blood_type">Blood Type</label>
+              <select class="form-control" name="blood_type" id="blood_type">
+                <option value="">Select Blood Type</option>
+                {% for blood_type in blood_types %}
+                <option value="{{ blood_type.id }}">{{ blood_type.blood_type_name }}</option>
+                {% endfor %}
+                
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="location">Select City Name</label>
+              <select class="form-control" name="location" id="location">
+                <option value="" disabled selected>Select City Name</option>
+                {% for city in cities %}
+                <option value="{{ city.weather_forecast__location }}">{{ city.weather_forecast__location}}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="date">Date You Are Collecting For</label>
+              <input type="date" class="form-control" id="date" name="date" required placeholder="Date You Are Collecting For" min="yyyy-mm-dd" max="yyyy-mm-dd">
+
+            </div>
+
+            <div class="form-group">
+              <label for="quantity">Quantity</label>
+              <input type="number" class="form-control" id="quantity" name="quantity" required 
+              aria-describedby="quantityHelp"
+              placeholder="Quantity">
+              <small id="quantityHelp" class="form-text text-muted">Enter the quantity of blood you need
+              </small>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary btn-block">Create </button>
+            </div>
+            </form>
+        </div>
+        <!-- /.card-body -->
+        <div class="card-footer">
+        </div>
+        <!-- /.card-footer-->
+      </div>
+      <!-- /.card -->
+
+    </section>
+    <!-- /.content -->
+  </div>
+  {% endblock 'content' %}
+  {% block 'myscripts' %}
+  {% load static %}
+  <script src="{% static 'js/bloodSupply.js' %}"></script>
+
+  {% endblock 'myscripts' %}

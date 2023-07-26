@@ -1,0 +1,89 @@
+{% extends 'layouts/admin.html' %}
+{% block 'content' %}
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Blood Types</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="{% url 'forecast:dashboard' %}">Home</a></li>
+              <li class="breadcrumb-item active">Blood Typese</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+
+      <!-- Default box -->
+      <div class="card">
+        <div class="card-header">
+        
+
+          <div class="card-tools">
+            <a href="{% url 'forecast:blood-types-list' %}" class="btn btn-primary">Back</a>
+          </div>
+        </div>
+        <div class="card-body">
+          {% comment %} 
+          form for adding blood type and description
+           {% endcomment %}
+           <form class="" action="{% url 'forecast:blood-types-edit' blood_type.id  %}" method="POST">
+            {% include '../includes/messages.html' %}
+            {% csrf_token %}
+
+            <div class="form-group">
+              <label for="blood_type_name">Blood Type</label>
+              <input type="text" name="blood_type_name" id="blood_type_name" class="form-control" placeholder="Enter Blood Type"
+                required="required"
+                arial-label="Blood Type"
+                aria-describedby="blood_type_name_help"
+                autofocus="autofocus"
+                autocomplete="off"
+                pattern="^(A\+|A-|B\+|B-|AB\+|AB-|O\+|O-)$" 
+                title="Please enter a valid blood type (e.g., A+, A-, B+, B-, AB+, AB-, O+, O-)"
+                maxlength="3"
+                minlength="1"
+                value="{{ blood_type.blood_type_name }}"
+              >
+              <small id="blood_type_name_help" class="form-text text-muted">
+                A+ , A- , B+ , B- , AB+ , AB- , O+ , O-
+              </small>
+
+            </div>
+
+            <div class="form-group">
+                <label for="Description">Description</label>
+                <textarea name="description" class="form-control" rows="3" placeholder="Enter Description"
+                arial-label="Blood Type"
+                aria-describedby="blood_type_name_help"
+                autofocus="autofocus"
+                autocomplete="off"
+                >{{ blood_type.description }}</textarea>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary btn-block">Update </button>
+            </div>
+            </form>
+
+
+          
+        </div>
+        <!-- /.card-body -->
+        <div class="card-footer">
+          Footer
+        </div>
+        <!-- /.card-footer-->
+      </div>
+      <!-- /.card -->
+
+    </section>
+    <!-- /.content -->
+  </div>
+  {% endblock 'content' %}

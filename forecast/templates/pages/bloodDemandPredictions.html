@@ -1,0 +1,125 @@
+
+{% extends 'layouts/admin.html' %}
+{% block 'content' %}
+{% load humanize %}
+<div class="content-wrapper">
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Blood Demand Predictions</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="{% url 'forecast:dashboard' %}">Home</a></li>
+              <li class="breadcrumb-item active">Predictions</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="content">
+
+      <div class="card">
+        <div class="card-header">
+        
+
+          <div class="card-tools">
+
+            <button type="button" id="syncWeatherDataBtn" class="btn btn-primary" data-toggle="modal" data-target="#modal-create-blood-forecast">
+              Add New
+            </button>
+
+           
+          </div>
+        </div>
+        
+
+        <div class="card-body">
+
+         
+
+
+
+          {% include '../includes/messages.html' %}
+          <table class="table table-striped table-bordered">
+            <thead class="thead-dark ">
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Date</th>
+                <th scope="col">Blood Type</th>
+                <th scope="col">Predicted Demand</th>
+                <th scope="col">Location</th>
+                <th scope="col">Temperature</th>
+                <th scope="col">Humidity</th>
+                <th scope="col">Population</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for blood_demand in blood_demands  %}
+              <tr>
+                <td scope="row">{{blood_demand.id}}</td>
+                <td>{{blood_demand.date}}</td>
+                <td>{{blood_demand.blood_type.blood_type_name}}</td>
+                <td>{{blood_demand.predicted_demand}}</td>
+                <td >{{blood_demand.weather_forecast.location|capfirst }}</td>
+                <td>{{blood_demand.weather_forecast.temperature}}</td>
+                <td>{{blood_demand.weather_forecast.humidity}}</td>
+                <td>{{blood_demand.weather_forecast.population|intcomma }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+      
+          
+        </div>
+        <div class="card-footer">
+          Footer
+        </div>
+      </div>
+
+    </section>
+  </div>
+
+  <div class="modal fade" id="modal-create-blood-forecast">
+    <div class="modal-dialog ">
+      <div class="modal-content">
+        <div id="syncNewDataOverlay" class="overlay d-none ">
+          <i class="fas fa-2x fa-sync fa-spin"></i>
+        </div>
+        <div class="modal-header">
+          <h4 class="modal-title">Blood Demand Prediction</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form id="syncBloodPredictionForm" action="{% url 'forecast:blood-predictions-sync' %}" method="POST">
+          {% csrf_token %}
+        <div class="modal-body">
+          <p class="text text-capitalize" >
+            Enter The Name Of the City You Want To Do Blood Demand Prediction For.
+          </p>
+
+          <div class="form-group">
+            <label for="location">Enter City Name</label>
+            <input type="text" class="form-control" id="location" name="location" required placeholder="Enter City Name E.G Nairobi">
+
+          </div>
+          
+        </div> 
+      
+        <div class="modal-footer justify-content-between">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  {% endblock 'content' %}
+  
+  {% block 'myscripts' %}
+  {% load static %}
+  <script src="{% static 'js/bloodDemandPrediction.js' %}"></script>
+  {% endblock 'myscripts' %}

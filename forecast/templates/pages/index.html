@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Blood Demand & Supply Platform</title>
+    {% load static %}
+    {% load humanize %}
+    <!-- Add Bootstrap CSS link -->
+    <link rel="stylesheet" href="{% static 'node_modules/bootstrap/dist/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'node_modules/@fortawesome/fontawesome-free/css/all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+     <!-- Navbar Section -->
+     <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Smart Blood Platform</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about-us">About Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact-us">Contact Us</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'forecast:login' %}">Login</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header Section -->
+    <header class="jumbotron text-center banner-section">
+        <h1 class="display-4">Revolutionizing Blood Supply Chains with AI/ML</h1>
+       
+    </header>
+
+    <div class="container">
+        <!-- Introduction Section -->
+        <section id="introduction" class="my-5">
+            <h2 class="text-center">Welcome to Our Smart Blood Demand & Supply Platform</h2>
+            <p class="lead">
+                Our platform offers a robust blood demand and supply chain that reduces uncertainty in blood demand by forecasting blood collection/demand. It also minimizes blood wastage and shortage through effective blood inventory management, all powered by AI and machine learning.
+            </p>
+        </section>
+
+        <!-- Key Features Section -->
+        <section id="key-features" class="my-5">
+            <h2 class="text-center">Key Features</h2>
+            <div class="row">
+                <div class="col-md-4">
+                    <i class="fas fa-chart-line fa-3x d-block mx-auto mb-3"></i> <!-- Add icons here -->
+                    <h3 class="text-center">Blood Demand Forecasting</h3>
+                    <p>Our system accurately forecasts blood demand, ensuring adequate supply when and where it's needed.</p>
+                </div>
+                <div class="col-md-4">
+                    <i class="fas fa-users fa-3x d-block mx-auto mb-3"></i> <!-- Add icons here -->
+                    <h3 class="text-center">Blood Donor Classification</h3>
+                    <p>Predict daily unbooked donors to control blood collection based on demand forecasting results.</p>
+                </div>
+                <div class="col-md-4">
+                    <i class="fas fa-calendar-alt fa-3x d-block mx-auto mb-3"></i> <!-- Add icons here -->
+                    <h3 class="text-center">Appointment Scheduling</h3>
+                    <p>Optimize blood donation appointments based on expected donations to enhance blood quantity.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works Section -->
+        <section id="how-it-works" class="my-2">
+            <div class="row">
+                <div class="col-md-6">
+                    <h2>How It Works</h2>
+                    <p class="lead">Our platform leverages machine learning and time series forecasting models to efficiently manage blood inventory throughout the supply chain.</p>
+                    <p>Our system accurately forecasts blood demand, ensuring adequate supply when and where it's needed. It also predicts daily unbooked donors to control blood collection based on demand forecasting results. Finally, it optimizes blood donation appointments based on expected donations to enhance blood quantity.</p>
+                </div>
+                <div class="col-md-6">
+                    <img src="{% static 'imgs/p1.jpg' %}" alt="How It Works" class="img-fluid how-it-work-image">
+                </div>
+           
+            <!-- Add step-by-step visual representation here -->
+            
+           
+        </section>
+
+        <!-- Benefits Section -->
+        <section id="benefits" class="my-0">
+            <h2 class="text-center">Benefits</h2>
+            <div class="row">
+                <div class="col-md-6 benefit-imgs ">
+                    <img src="{% static 'imgs/b2.jpg' %}" alt="Benefits" class="img-fluid">
+                </div>
+                <div class="col-md-6 row">
+                    
+                <div class="col-md-12 benefits">
+                    <i class="fas fa-check fa-2x"></i> <!-- Add icons here -->
+                    <div class="benefits-text">
+                        <h2>Reduced blood wastage</h2>
+                        <p>
+                            Our system accurately forecasts blood demand, ensuring adequate supply when and where it's needed.
+
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-12 benefits">
+                    <i class="fas fa-check fa-2x"></i> <!-- Add icons here -->
+                    <div class="benefits-text">
+                        <h2>Improved blood distribution, matching supply with demand.</h2>
+                            <p>
+                                Our platform optimizes the distribution of blood supplies based on demand forecasts. By effectively matching supply with demand, we ensure that blood is available where and when it is needed the most. This reduces shortages and wastage, making the blood supply chain more efficient and reliable for patients in need.
+                            </p>
+
+                        </div>
+                </div>
+                <div class="col-md-12 benefits">
+                    <i class="fas fa-check fa-2x"></i> <!-- Add icons here -->
+                    <div class="benefits-text" >
+                        <h2>Efficient blood inventory management for a stable supply.</h2>
+                            <p>
+                                Our AI-driven platform utilizes advanced inventory management techniques to maintain a stable and optimal blood supply. By continuously monitoring blood demand, donations, and expiration rates, we ensure that blood inventory levels are always balanced. This helps prevent shortages during peak demand periods and minimizes wastage by accurately forecasting blood requirements. With our system, blood banks and hospitals can efficiently manage their inventory, providing a steady supply of blood for patients in need.
+
+                            </p>
+
+                    </div>
+                </div>
+            </div>
+
+            </div>
+        </section>
+
+        <!-- Call-to-Action (CTA) -->
+        <section id="cta" class="text-center my-5">
+            <h2>Ready to Improve Your Blood Supply Chain?</h2>
+            <a href="#" class="btn btn-primary btn-lg">Get Started</a>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section id="testimonials" class="my-5">
+            <h2 class="text-center">What Our Users Say</h2>
+            <div class="row">
+                <div class="col-md-6 offset-md-3">
+                    <blockquote class="blockquote text-center">
+                        <p class="mb-0">"The platform has transformed how we manage our blood inventory. We highly recommend it!"</p>
+                        <footer class="blockquote-footer">Daniel Kamau, Blood Bank Manager</footer>
+                    </blockquote>
+                </div>
+            </div>
+            <!-- Add more testimonials here -->
+        </section>
+    </div>
+
+    <!-- Contact Information Section -->
+    <section id="contact" class="bg-light text-center py-5">
+        <div class="container">
+            <h2>Contact Us</h2>
+            <p>Email: info@bloodsupplyplatform.com</p>
+            <p>Phone: +254 (7208) 969-47</p>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="bg-dark text-light py-3">
+        <div class="container text-center">
+            <ul class="list-inline">
+                <li class="list-inline-item"><a href="#">Privacy Policy</a></li>
+                <li class="list-inline-item"><a href="#">Terms of Service</a></li>
+            </ul>
+        </div>
+    </footer>
+
+    <script src="{% static 'node_modules/@fortawesome/fontawesome-free/js/all.min.js' %}"></script>
+    <script src="{% static 'node_modules/jquery/dist/jquery.min.js' %}"></script>
+    <script src="{% static 'node_modules/popper.js/dist/umd/popper.min.js' %}"></script>
+    <script src="{% static 'node_modules/bootstrap/dist/js/bootstrap.min.js' %}"></script>
+
+    <!-- Add Font Awesome icons and Bootstrap JS scripts -->
+    {% comment %} <script src="https://kit.fontawesome.com/your-font-awesome-kit-id.js" crossorigin="anonymous"></script> {% endcomment %}
+    {% comment %} <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script> {% endcomment %}
+    {% comment %} <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script> {% endcomment %}
+    {% comment %} <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> {% endcomment %}
+</body>
+</html>

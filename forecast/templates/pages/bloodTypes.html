@@ -1,0 +1,87 @@
+{% extends 'layouts/admin.html' %}
+{% block 'content' %}
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Blood Types</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="{% url 'forecast:dashboard' %}">Home</a></li>
+              <li class="breadcrumb-item active">Blood Typese</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+
+      <!-- Default box -->
+      <div class="card">
+        <div class="card-header">
+        
+
+          <div class="card-tools">
+            <a href="{% url 'forecast:blood-types-add' %}" class="btn btn-primary">Add Blood Type</a>
+          </div>
+        </div>
+        <div class="card-body">
+          {% include '../includes/messages.html' %}
+          <table class="table table-striped table-bordered">
+            <thead class="thead-dark ">
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Blood Type</th>
+                <th scope="col">Description</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for bloodType in bloodTypes  %}
+              <tr>
+                <td scope="row">{{bloodType.id}}</td>
+                <td>{{bloodType.blood_type_name}}</td>
+                <td>{{bloodType.description}}</td>
+                <td>
+                  <a href="{% url 'forecast:blood-types-edit' bloodType.id %}" class="btn btn-warning"> 
+                    <i class="fa fa-edit"></i> Edit
+                  </a>
+                  <form style="display:inline-block;" class="deleteBloodTypeForm1" 
+                  onSubmit="return confirm('Are You Sure You need To Delete!')"
+                  action="{% url 'forecast:blood-types-delete' bloodType.id %}" method="POST">
+                    {% csrf_token %}
+                    <button class="btn btn-danger ">  <i class="fa fa-trash"></i> Delete </button>
+                  </form>
+
+                 
+
+              </tr>
+              {% endfor %}
+             
+            </tbody>
+          </table>
+      
+          
+        </div>
+        <!-- /.card-body -->
+        <div class="card-footer">
+          Footer
+        </div>
+        <!-- /.card-footer-->
+      </div>
+      <!-- /.card -->
+
+    </section>
+    <!-- /.content -->
+  </div>
+  {% endblock 'content' %}
+  
+  {% block 'myscripts' %}
+  {% load static %}
+  <script src="{% static 'js/bloodtype.js' %}"></script>
+  {% endblock 'myscripts' %}
