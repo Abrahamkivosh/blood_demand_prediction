@@ -1,0 +1,11 @@
+Django
+django-smtp-ssl
+joblib
+numpy
+pandas
+Pillow
+requests
+scikit-learn
+scipy
+python-dotenv
+python-dateutil
