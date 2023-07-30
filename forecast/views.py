@@ -210,16 +210,23 @@ def bloodDemandPredictionStore(request):
                     call_command("seed_blood_types")
 
                 blood_types = BloodType.objects.all()
+                print("blood_types Count : ", blood_types.count())
                 for blood_type in blood_types:
                     weather_forecasts = WeatherForecast.objects.filter(is_processed=False, location = location ).order_by('-date')
+                    print("weather_forecasts Count : ", weather_forecasts.count())
                     for weather_forecast in weather_forecasts:
                         prediction = predict_blood_demand(blood_type.blood_type_name, weather_forecast.temperature)
                         result = {"blood_type": blood_type,"weather_forecast": weather_forecast,"date": date.today(),"predicted_demand": int(prediction)}
-                        if not BloodDemandPrediction.objects.filter(date=result["date"], blood_type=result["blood_type"] ).exists():
-                            BloodDemandPrediction.objects.create(**result)
-                # update  weather_forecast is_processed to True
-                weather_forecast.is_processed = True
-                weather_forecast.save()
+                        print("//////////////////////////////////////////")
+                        print(result)
+                        print("//////////////////////////////////////////")
+                        # if not BloodDemandPrediction.objects.filter(date=result["date"], blood_type=result["blood_type"] ).exists():
+                        BloodDemandPrediction.objects.create(**result)
+                        print("DONE SAVING : " , result)
+                        # update  weather_forecast is_processed to True
+                        weather_forecast.is_processed = True
+                        weather_forecast.save()
+                        print("DONE PROCESSING : ")
 
 
 
