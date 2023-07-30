@@ -1,18 +1,4 @@
 from django.db import models
-    
-from django.contrib.auth.models import AbstractUser, Group, Permission
-
-# Create your models here.
-# models.py
-
-
-from django.db import models
-
-
-
-    
-
-
 class BloodType(models.Model):
     BLOOD_TYPE_NAME = (
             ('A-', 'A-'),

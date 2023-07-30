@@ -131,6 +131,8 @@ USE_I18N = True
 
 USE_TZ = True
 
+DJANGO_SETTINGS_MODULE= 'server.settings'
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
@@ -151,3 +153,5 @@ EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 EMAIL_PORT = '2525'
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
+
+
