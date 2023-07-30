@@ -26,7 +26,7 @@ $("#bloodSupplyForm").submit(function(event){
                 title: response.message,
     
               }).then(function(){
-                window.location.href =  window.location.href 
+                window.location.href =  "/blood-supplies" 
               })
             
         },

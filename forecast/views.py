@@ -394,7 +394,10 @@ class BloodSupplyAddView(View):
                 # sum already  existing blood supply for that day
                 sm= BloodSupply.objects.filter(blood_type_id=blood_type_id, date=search_date).aggregate(Sum('blood_quantity'))
                 blood_supply_sum = sm.get('blood_quantity__sum')
-                new_quantity_existing =blood_supply_sum  + blood_quantity
+                if blood_supply_sum is None:
+                    blood_supply_sum = 0
+
+                new_quantity_existing = float( blood_supply_sum)  + float( blood_quantity)
                 predicted_demand = blood_demand_prediction.predicted_demand
                 if predicted_demand  < new_quantity_existing:
                     responseMessage = {"status": False,"status_code":400, "message": "Blood Supply Quantity is Greater Than Predicted Blood Demand of {0}".format(predicted_demand)  }
@@ -403,6 +406,7 @@ class BloodSupplyAddView(View):
 
                 blood_supply = BloodSupply(blood_type_id=blood_type_id, date=search_date, blood_quantity=blood_quantity, user=user, blood_demand_prediction=blood_demand_prediction)
                 blood_supply.save()
+                messages.success(request, "Successfully Added Blood Supply", extra_tags="success" )
                 responseMessage = {"status": True,"status_code":200, "message": "Successfully Added Blood Supply"}
             else:
                 responseMessage = {"status": False,"status_code":400, "message": "No Blood Demand For That Day"}
