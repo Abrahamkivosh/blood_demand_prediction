@@ -9,4 +9,4 @@ scikit-learn
 scipy
 python-dotenv
 python-dateutil
-mysqlclient
+mysqlclient==1.4.6

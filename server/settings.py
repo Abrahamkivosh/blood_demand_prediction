@@ -88,13 +88,13 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',  # Use the MySQL database engine for MariaDB
         'NAME': 'forecast',         # Replace 'your_database_name' with your actual database name
         'USER': 'root',         # Replace 'your_database_user' with your actual database username
-        'PASSWORD': 'root', # Replace 'your_database_password' with your actual database password
+        'PASSWORD': '', # Replace 'your_database_password' with your actual database password
         'HOST': '127.0.0.1',                  # Replace 'localhost' with your database host, or use the IP address
         'PORT': '',                           # Leave empty to use the default port (3306) or specify the port if different
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",  # Optional: Set SQL mode to handle strict mode issues
             # Any other MariaDB-specific options can be specified here if needed
-            # 'unix_socket': '/opt/lampp/var/mysql/mysql.sock'
+            'unix_socket': '/opt/lampp/var/mysql/mysql.sock'
         },
     }
 }
