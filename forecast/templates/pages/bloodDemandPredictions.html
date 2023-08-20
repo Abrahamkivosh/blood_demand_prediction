@@ -46,25 +46,27 @@
           <table class="table table-striped table-bordered">
             <thead class="thead-dark ">
               <tr>
-                <th scope="col">#</th>
                 <th scope="col">Date</th>
+                <th scope="col">Gender</th>
+                <th scope="col">Age</th>
                 <th scope="col">Blood Type</th>
-                <th scope="col">Predicted Demand</th>
                 <th scope="col">Location</th>
                 <th scope="col">Temperature</th>
                 <th scope="col">Population</th>
+                <th scope="col">Predicted Demand</th>
               </tr>
             </thead>
             <tbody>
               {% for blood_demand in blood_demands  %}
               <tr>
-                <td scope="row">{{blood_demand.id}}</td>
-                <td>{{blood_demand.date}}</td>
+                <td scope="row">{{blood_demand.date}}</td>
+                <td>{{blood_demand.gender}}</td>
+                <td>{{blood_demand.age}}</td>
                 <td>{{blood_demand.blood_type.blood_type_name}}</td>
-                <td>{{blood_demand.predicted_demand}}</td>
                 <td >{{blood_demand.location|capfirst }}</td>
                 <td>{{blood_demand.temperature}}</td>
-                <td>{{blood_demand.population|intcomma }}</td>
+                <td>{{blood_demand.location.population|intcomma }}</td>
+                <td>{{blood_demand.predicted_demand|intcomma }}</td>
               </tr>
               {% endfor %}
             </tbody>
@@ -120,8 +122,8 @@
           </div>
 
           <div class="form-group col-md-4">
-            <label for="location">Gender</label>
-            <select class="form-control" name="events" id="events">
+            <label for="gender">Gender</label>
+            <select class="form-control" name="gender" id="gender">
               <option value="" selected disabled >Select</option>
               <option value="Male" >Male</option>
               <option value="Female" >Female</option>

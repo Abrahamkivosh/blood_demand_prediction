@@ -71,6 +71,7 @@ def predict_blood_demand(blood_type, temperature, age, gender, population, event
         model, label_encoder = train_random_forest_regressor_model(data)
     
     # Convert Gender to numeric using one-hot encoding
+    print("GENDER :: ", gender)
     if gender.lower() == 'male':
         gender = 1
     else:

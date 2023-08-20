@@ -181,12 +181,39 @@ def bloodDemandPredictionStore(request):
 
             age = request.POST.get("age")
             temperature = request.POST.get("temperature")
+            gender = request.POST.get("gender")
             events = request.POST.get("events")
             date = request.POST.get("date")
             user = request.user
-
-
-
+             # Count the number of blood types
+            blood_types_count = BloodType.objects.all().count()
+            if blood_types_count != 8:
+                # run command to seed blood types
+                call_command("seed_blood_types")
+            # check if blood demand prediction for that day exists
+            blood_demand_prediction = BloodDemandPrediction.objects.filter(
+                location_id=locationId, date=date , age = age, gender = gender
+            ).first()
+            if blood_demand_prediction is not None:
+                raise Exception("Blood Demand Prediction Already Exists For That Day")
+            else:
+                # loop the blood types and predict blood demand
+                for blood_type in BloodType.objects.all():
+                    blood_demand = predict_blood_demand(
+                        blood_type=  blood_type.blood_type_name,
+                        temperature=temperature,
+                        age=age,
+                        gender= gender,
+                        population= location.population,
+                        events= events
+                    )
+                    # save the blood demand prediction
+                    blood_demand_prediction = BloodDemandPrediction(
+                        blood_type=blood_type,location=location,temperature = temperature,age=age,
+                        date=date, predicted_demand=blood_demand,user=user,gender = gender,events = events
+                    )
+                    blood_demand_prediction.save()
+                responseMessage = {"status": True,"status_code":200, "message": "Successfully Created Blood Demand Prediction"}
 
         except  Exception as e:
 
