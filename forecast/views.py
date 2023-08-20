@@ -311,13 +311,14 @@ class UserUpdateView(View):
 class BloodSupplyView(View):
     template_name = "pages/bloodSupplies.html"
    
-    data = {
-        "title": "Blood Supply",
-        'blood_supplies': BloodSupply.objects.all().order_by('-id'),
-    }
+    
 
     def get(self, request):
-        return render(request, self.template_name, self.data)
+        data = {
+        "title": "Blood Supply",
+        'blood_supplies': BloodSupply.objects.all().order_by('-id'),
+        }
+        return render(request, self.template_name, data)
     
 
 class BloodSupplyAddView(View):
