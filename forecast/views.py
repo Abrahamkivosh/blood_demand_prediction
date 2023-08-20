@@ -334,9 +334,9 @@ class BloodSupplyAddView(View):
 
     def get(self, request):
         # check list in cities is greater than 0 if so redirect to blood-predictions-list url
-        if (self.data['predictions_count'] < 1):
-            messages.error(request, "Do Blood Predictions Before You Add Blood Into Blood Bank ", extra_tags="danger" )
-            return redirect("forecast:blood-predictions-list")
+        # if (self.data['predictions_count'] < 1):
+        #     messages.error(request, "Do Blood Predictions Before You Add Blood Into Blood Bank ", extra_tags="danger" )
+        #     return redirect("forecast:blood-predictions-list")
             
         return render(request, self.template_name, self.data)
 

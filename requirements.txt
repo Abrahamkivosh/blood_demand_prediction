@@ -9,3 +9,4 @@ scikit-learn
 scipy
 python-dotenv
 python-dateutil
+mysqlclient
