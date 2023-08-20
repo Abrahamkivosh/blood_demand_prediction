@@ -17,9 +17,6 @@ urlpatterns = [
     path('blood-types/<int:bloodTypeId>/edit', login_required(views.BloodTypeUpdateView.as_view() )  , name='blood-types-edit'),
     path('blood-types/<int:bloodTypeId>/delete', login_required( views.BloodTypeDeleteView.as_view())  , name='blood-types-delete'),
 
-    path('weather-forecasts',login_required( views.getWeatherForecastIndex) , name="weather-forecasts-list"),
-    path('weather-forecasts/sync',login_required(views.getWeatherForecastSync ) , name="weather-forecasts-sync"),
-
     path('blood-predictions', login_required(views.bloodDemandPredictionIndex )  , name='blood-predictions-list'),
     path('blood-predictions/sync', login_required(views.bloodDemandPredictionStore )  , name='blood-predictions-sync'),
 

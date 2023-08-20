@@ -52,7 +52,6 @@
                 <th scope="col">Predicted Demand</th>
                 <th scope="col">Location</th>
                 <th scope="col">Temperature</th>
-                <th scope="col">Humidity</th>
                 <th scope="col">Population</th>
               </tr>
             </thead>
@@ -63,10 +62,9 @@
                 <td>{{blood_demand.date}}</td>
                 <td>{{blood_demand.blood_type.blood_type_name}}</td>
                 <td>{{blood_demand.predicted_demand}}</td>
-                <td >{{blood_demand.weather_forecast.location|capfirst }}</td>
-                <td>{{blood_demand.weather_forecast.temperature}}</td>
-                <td>{{blood_demand.weather_forecast.humidity}}</td>
-                <td>{{blood_demand.weather_forecast.population|intcomma }}</td>
+                <td >{{blood_demand.location|capfirst }}</td>
+                <td>{{blood_demand.temperature}}</td>
+                <td>{{blood_demand.population|intcomma }}</td>
               </tr>
               {% endfor %}
             </tbody>
@@ -83,7 +81,7 @@
   </div>
 
   <div class="modal fade" id="modal-create-blood-forecast">
-    <div class="modal-dialog ">
+    <div class="modal-dialog modal-lg ">
       <div class="modal-content">
         <div id="syncNewDataOverlay" class="overlay d-none ">
           <i class="fas fa-2x fa-sync fa-spin"></i>
@@ -96,18 +94,57 @@
         </div>
         <form id="syncBloodPredictionForm" action="{% url 'forecast:blood-predictions-sync' %}" method="POST">
           {% csrf_token %}
-        <div class="modal-body">
-          <p class="text text-capitalize" >
-            Enter The Name Of the City You Want To Do Blood Demand Prediction For.
-          </p>
+        <div class="modal-body row">
 
-          <div class="form-group">
-            <label for="location">Enter City Name</label>
-            <input type="text" class="form-control" id="location" name="location" required placeholder="Enter City Name E.G Nairobi">
+          <div class="form-group col-md-4">
+            <label for="location">Select City</label>
+            <select class="form-control" id="blood_type" name="blood_type" required>
+              <option value="">Select Blood Type</option>
+              {% for location in locations %}
+              <option value="{{location.id}}">{{location.name}}</option>
+              {% endfor %}
+            </select>
 
+          </div>
+
+          <div class="form-group col-md-4">
+            <label for="age">Age</label>
+            <input type="number" class="form-control" id="age" name="age" required placeholder="Age">
+
+          </div>
+
+          <div class="form-group col-md-4">
+            <label for="temperature">Temperature in celsius</label>
+            <input type="text" class="form-control" id="temperature" name="temperature" required placeholder="Enter temperature">
+
+          </div>
+
+          <div class="form-group col-md-4">
+            <label for="location">Gender</label>
+            <select class="form-control" name="events" id="events">
+              <option value="" selected disabled >Select</option>
+              <option value="Male" >Male</option>
+              <option value="Female" >Female</option>
+            </select>
+          </div>
+         
+
+          <div class="form-group col-md-4">
+            <label for="date">Pick Day You are Predicting For</label>
+            <input type="date" class="form-control" id="date" name="date" required placeholder="Choose Day">
+          </div>
+
+          <div class="form-group col-md-4">
+            <label for="events">Event On The Day  ?</label>
+            <select class="form-control" name="events" id="events">
+              option value="" selected disabled >Select</option>
+              <option value="1" >Yes</option>
+              <option value="0" >No</option>
+            </select>
           </div>
           
         </div> 
+        
       
         <div class="modal-footer justify-content-between">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

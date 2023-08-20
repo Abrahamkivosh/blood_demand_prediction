@@ -4,11 +4,10 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.views import generic
-from .models import BloodType, WeatherForecast, BloodDemandPrediction, BloodType, BloodSupply
+from .models import BloodType, BloodDemandPrediction, BloodType, BloodSupply, Location
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 import json
 from datetime import datetime, date
-from .services.weather_service import get_weather_forecast
 from .services.blood_demand_service import predict_blood_demand
 from django.db import IntegrityError
 from django.core.management import call_command
@@ -63,7 +62,6 @@ class DashboardView(View):
     data = {
         "title": "Dashboard",
         'blood_types_count': BloodType.objects.all().count(),
-        'weather_forecasts_count': WeatherForecast.objects.all().count(),
         'blood_demand_predictions_count': BloodDemandPrediction.objects.all().count(),
         'users_count': User.objects.all().count(),
         'latest_blood_demand_predictions': BloodDemandPrediction.objects.all().order_by('-date')[:5],
@@ -166,73 +164,30 @@ class BloodTypeDeleteView(View):
         return redirect("forecast:blood-types-list")
 
 
-def getWeatherForecastIndex(request):
-    weatherForecasts = WeatherForecast.objects.all().order_by('-date')
-    template_name = "pages/weatherForecastIndex.html"
-    return render(request, template_name, {"weatherForecasts": weatherForecasts})
-
-
-def getWeatherForecastSync(request):
-
-    if request.method == "POST":
-        location = request.POST.get("location")
-        response = processWeatherData(location)
-        
-        if response["status"] == True:
-            responseMessage = JsonResponse(response, status=200, safe=False)
-        else:
-            responseMessage = JsonResponse(response, status=400, safe=False)
-
-    else:
-        response = {"status": False, "message": "Invalid Method"}
-        responseMessage = JsonResponse(response, status=400, safe=False)
-
-    return responseMessage
 
 
 def bloodDemandPredictionIndex(request):
     blood_demands = BloodDemandPrediction.objects.all()
+    locations = Location.objects.all()
     template_name = "pages/bloodDemandPredictions.html"
 
-    return render(request, template_name, {"blood_demands": blood_demands})
+    return render(request, template_name, {"blood_demands": blood_demands, 'locations': locations})
 
 
 def bloodDemandPredictionStore(request):
     if request.method == "POST":
         try:
             location = request.POST.get("location")
-            response = processWeatherData(location)
-            if response["status"] == True:
-                # Count the number of blood types
-                blood_types_count = BloodType.objects.all().count()
-                if blood_types_count != 8:
-                    # run command to seed blood types
-                    call_command("seed_blood_types")
-
-                blood_types = BloodType.objects.all()
-                print("blood_types Count : ", blood_types.count())
-                for blood_type in blood_types:
-                    weather_forecasts = WeatherForecast.objects.filter(is_processed=False, location = location ).order_by('-date')
-                    print("weather_forecasts Count : ", weather_forecasts.count())
-                    for weather_forecast in weather_forecasts:
-                        prediction = predict_blood_demand(blood_type.blood_type_name, weather_forecast.temperature)
-                        result = {"blood_type": blood_type,"weather_forecast": weather_forecast,"date": date.today(),"predicted_demand": int(prediction)}
-                        print("//////////////////////////////////////////")
-                        print(result)
-                        print("//////////////////////////////////////////")
-                        # if not BloodDemandPrediction.objects.filter(date=result["date"], blood_type=result["blood_type"] ).exists():
-                        BloodDemandPrediction.objects.create(**result)
-                        print("DONE SAVING : " , result)
-                        # update  weather_forecast is_processed to True
-                        weather_forecast.is_processed = True
-                        weather_forecast.save()
-                        print("DONE PROCESSING : ")
+            date = request.POST.get("date")
+            blood_type_id = request.POST.get("blood_type_id")
+            blood_type = BloodType.objects.get(pk=blood_type_id)
+            age = request.POST.get("age")
+            temperature = request.POST.get("temperature")
+            population = request.POST.get("population")
+            events = request.POST.get("events")
+            user = request.user
 
 
-
-                responseMessage = {"status": True,"status_code":200, "message": "Successfully Processed Blood Prediction"}
-            else:
-                responseMessage =  {"status": False,"status_code":400, "message": "Try Another city"}
         except  Exception as e:
 
             print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
@@ -242,25 +197,6 @@ def bloodDemandPredictionStore(request):
         
     return JsonResponse(responseMessage, status=responseMessage["status_code"], safe=False)
         
-       
-def processWeatherData(location):
-    data = get_weather_forecast(location.lower())
-    if data:
-        for forecast in data:
-            forecast_date = datetime.strptime(forecast["date"], "%Y-%m-%d %H:%M:%S").date()
-            if not WeatherForecast.objects.filter( date=forecast_date,latitude=forecast["latitude"],longitude=forecast["longitude"] ).exists():
-                WeatherForecast.objects.create(date=forecast_date,location=forecast["location"],latitude=forecast["latitude"], longitude=forecast["longitude"],temperature=forecast["temperature"],humidity=forecast["humidity"],population=forecast["population"], )
-
-        response = {
-            "status": True,
-            "message": "Weather forecast synced successfully",
-        }
-    else:
-        response = {
-            "status": False,
-            "message": "No Data For That City"
-        }
-    return response
 
 def usersIndex(request):
     template_name = "pages/usersList.html"
@@ -367,7 +303,6 @@ class BloodSupplyAddView(View):
         "title": "Blood Supply",
         'blood_types': BloodType.objects.all().order_by('blood_type_name'),
         'today': date.today(),
-        'cities': BloodDemandPrediction.objects.filter(date__gte=current_date).values('weather_forecast__location').distinct(),
 
     }
 
@@ -389,7 +324,7 @@ class BloodSupplyAddView(View):
             blood_quantity = float( request.POST.get("quantity"))
             user = request.user
 
-            blood_demand_prediction = BloodDemandPrediction.objects.filter (blood_type_id=blood_type_id, weather_forecast__location=location_name, date=search_date).first()
+            blood_demand_prediction = BloodDemandPrediction.objects.filter (blood_type_id=blood_type_id, date=search_date).first()
             if blood_demand_prediction is not None:
                 # sum already  existing blood supply for that day
                 sm= BloodSupply.objects.filter(blood_type_id=blood_type_id, date=search_date).aggregate(Sum('blood_quantity'))
