@@ -330,14 +330,14 @@ class BloodSupplyAddView(View):
         "title": "Blood Supply",
         'blood_types': BloodType.objects.all().order_by('blood_type_name'),
         'today': date.today(),
+        'predictions_count' : BloodDemandPrediction.objects.count(),
+        'cities' : Location.objects.all()
 
     }
 
-   
-
     def get(self, request):
         # check list in cities is greater than 0 if so redirect to blood-predictions-list url
-        if (len(self.data['cities']) < 1):
+        if (self.data['predictions_count'] < 1):
             messages.error(request, "Do Blood Predictions Before You Add Blood Into Blood Bank ", extra_tags="danger" )
             return redirect("forecast:blood-predictions-list")
             
