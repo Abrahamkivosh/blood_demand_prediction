@@ -97,9 +97,9 @@
         <div class="modal-body row">
 
           <div class="form-group col-md-4">
-            <label for="location">Select City</label>
-            <select class="form-control" id="blood_type" name="blood_type" required>
-              <option value="">Select Blood Type</option>
+            <label for="location_id">Select City</label>
+            <select class="form-control" id="location_id" name="location_id" required>
+              <option selected Disabled>Select City</option>
               {% for location in locations %}
               <option value="{{location.id}}">{{location.name}}</option>
               {% endfor %}

@@ -12,6 +12,7 @@ from .services.blood_demand_service import predict_blood_demand
 from django.db import IntegrityError
 from django.core.management import call_command
 from django.db.models import Sum
+from .services.location_service import get_location
 
 
 class IndexView(View):
@@ -164,8 +165,6 @@ class BloodTypeDeleteView(View):
         return redirect("forecast:blood-types-list")
 
 
-
-
 def bloodDemandPredictionIndex(request):
     blood_demands = BloodDemandPrediction.objects.all()
     locations = Location.objects.all()
@@ -177,15 +176,16 @@ def bloodDemandPredictionIndex(request):
 def bloodDemandPredictionStore(request):
     if request.method == "POST":
         try:
-            location = request.POST.get("location")
-            date = request.POST.get("date")
-            blood_type_id = request.POST.get("blood_type_id")
-            blood_type = BloodType.objects.get(pk=blood_type_id)
+            locationId = request.POST.get("location_id")
+            location = Location.objects.get(pk=locationId)
+
             age = request.POST.get("age")
             temperature = request.POST.get("temperature")
-            population = request.POST.get("population")
             events = request.POST.get("events")
+            date = request.POST.get("date")
             user = request.user
+
+
 
 
         except  Exception as e:
@@ -404,3 +404,59 @@ class BloodSupplyDeleteView(View):
             request, "Blood supply deleted successfully", extra_tags="success"
         )
         return redirect("forecast:blood-supplies-list")
+
+
+
+class LocationView(View):
+    template_name = "pages/locationsIndex.html"
+    context_object_name = "locations"
+
+    def get(self, request):
+        return render(request, self.template_name, {"locations": Location.objects.all().order_by("name")})
+
+    def post(self, request):
+        location_name = request.POST.get("name")
+        location_name = location_name.lower()
+        # validate that location_name is not saved to DB
+        try:
+            if Location.objects.filter(name=location_name).exists():
+                raise Exception("The Location Already Exists")
+            else:
+                # call location service
+                response = get_location(location_name)
+                if response :
+                    post_params = {
+                        "name": response.get("name"),
+                        "population": response.get("population"),
+                        "latitude": response.get("latitude"),
+                        "longitude": response.get("longitude")
+                       
+                    }
+                    print(post_params)
+                
+                    Location.objects.create(**post_params)
+                    responseMessage = {"status": True,"status_code":200, "message": "Location Saved"}
+                else:
+                    raise Exception("Location Not Found")
+            return JsonResponse(responseMessage, status=responseMessage["status_code"], safe=False) 
+        except  Exception as e:
+                    
+                    print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+                    print(e)
+                    print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+                    responseMessage = {"status": False,"status_code":400, "message": str(e)}
+                    return JsonResponse(responseMessage, status=responseMessage["status_code"], safe=False)
+        
+
+
+class LocationDeleteView(View):
+    def post(self, request, locationId):
+        location = get_object_or_404(Location, pk=locationId)
+
+        # Perform the delete operation
+        location.delete()
+
+        messages.success(
+            request, "Location deleted successfully", extra_tags="success"
+        )
+        return redirect("forecast:locations-list")

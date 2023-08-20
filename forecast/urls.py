@@ -30,5 +30,7 @@ urlpatterns = [
     path('blood-supplies/<int:bloodSupplyId>/edit', login_required(views.BloodSupplyUpdateView.as_view() )  , name='blood-supplies-edit'),
     path('blood-supplies/<int:bloodSupplyId>/delete', login_required( views.BloodSupplyDeleteView.as_view())  , name='blood-supplies-delete'),
 
+    path('locations/', login_required( views.LocationView.as_view())  , name='locations-list'),
+    path('locations/<int:locationId>/delete', login_required( views.LocationDeleteView.as_view())  , name='locations-delete'),
     
 ]
