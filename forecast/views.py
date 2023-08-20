@@ -313,11 +313,8 @@ class BloodSupplyView(View):
    
     data = {
         "title": "Blood Supply",
-        'blood_supplies': BloodSupply.objects.all().order_by('-date'),
-       
-
+        'blood_supplies': BloodSupply.objects.all().order_by('-id'),
     }
-   
 
     def get(self, request):
         return render(request, self.template_name, self.data)
