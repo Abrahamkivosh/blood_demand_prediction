@@ -451,6 +451,9 @@ class LocationView(View):
             else:
                 # call location service
                 response = get_location(location_name)
+                print("=====================================")
+                print(response)
+                print("=====================================")
                 if response :
                     post_params = {
                         "name": response.get("name"),

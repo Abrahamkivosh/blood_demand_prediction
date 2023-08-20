@@ -42,11 +42,12 @@ def get_location(city_name):
                 "population": data["city"].get("population")
             })
 
-        # Cache the data for one day (86400 seconds)
-        cache.set(cache_key, forecast_data, timeout=86400)
+        
 
         # get first object in the array forecast_data
         forecast_dt =  forecast_data[0]
+        # Cache the data for one day (86400 seconds)
+        cache.set(cache_key, forecast_dt, timeout=86400)
 
         return forecast_dt
     else:
