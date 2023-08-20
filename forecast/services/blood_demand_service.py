@@ -11,7 +11,7 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 BLOOD_DEMAND_DATA_2020_FILE_PATH = BASE_DIR / 'data/blood_demand_data_2020.csv'
-LINEAR_REGRESSION_MODEL_FILE_PATH = BASE_DIR / "data/linear_regression_model.joblib"
+RANDOM_FOREST_REGRESSOR_MODEL_FILE_PATH = BASE_DIR / "data/random_forest_regressor_model.joblib"
 LABEL_ENCODER_FILE_PATH = BASE_DIR / "data/label_encoder.joblib"
 
 
@@ -43,7 +43,7 @@ def train_random_forest_regressor_model(data):
     # Save the trained model to a file so we can use it in other programs
 
     label_encoder.fit(data["Blood Type"])
-    joblib.dump(rf_model, os.path.join(BASE_DIR, LINEAR_REGRESSION_MODEL_FILE_PATH))
+    joblib.dump(rf_model, os.path.join(BASE_DIR, RANDOM_FOREST_REGRESSOR_MODEL_FILE_PATH))
     joblib.dump(label_encoder, os.path.join(BASE_DIR, LABEL_ENCODER_FILE_PATH))
 
     # calculate the mean squared error with testing dataset
@@ -64,14 +64,13 @@ def predict_blood_demand(blood_type, temperature, age, gender, population, event
 
     try:
         label_encoder = joblib.load(os.path.join(BASE_DIR, LABEL_ENCODER_FILE_PATH))
-        model = joblib.load(os.path.join(BASE_DIR, LINEAR_REGRESSION_MODEL_FILE_PATH))
+        model = joblib.load(os.path.join(BASE_DIR, RANDOM_FOREST_REGRESSOR_MODEL_FILE_PATH))
     except FileNotFoundError:
         # attempt to load the model and label encoder
         print("Model and label encoder not found. Training the model...")
         model, label_encoder = train_random_forest_regressor_model(data)
     
     # Convert Gender to numeric using one-hot encoding
-    print("GENDER :: ", gender)
     if gender.lower() == 'male':
         gender = 1
     else:

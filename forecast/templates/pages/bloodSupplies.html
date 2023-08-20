@@ -35,7 +35,6 @@
           <table class="table table-striped table-bordered">
             <thead class="thead-dark ">
               <tr>
-                <th scope="col">#</th>
                 <th scope="col">Blood Type</th>
                 <th scope="col">Quantity</th>
                 <th scope="col">Collected Date</th>
@@ -46,10 +45,8 @@
             <tbody>
               {% for blood_supply in blood_supplies  %}
               <tr>
-                <td scope="row">
-                  {{forloop.counter}}
-                </td>
-                <td>{{blood_supply.blood_type.blood_type_name}}</td>
+              
+                <td scope="row">{{blood_supply.blood_type.blood_type_name}}</td>
                 <td>{{blood_supply.blood_quantity}}</td>
                 <td>{{blood_supply.date}}</td>
                 <td>{{blood_supply.blood_demand_prediction.predicted_demand}}</td>

@@ -166,7 +166,7 @@ class BloodTypeDeleteView(View):
 
 
 def bloodDemandPredictionIndex(request):
-    blood_demands = BloodDemandPrediction.objects.all()
+    blood_demands = BloodDemandPrediction.objects.all().order_by("-id")
     locations = Location.objects.all()
     template_name = "pages/bloodDemandPredictions.html"
 
